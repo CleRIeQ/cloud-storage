@@ -1,0 +1,77 @@
+{% load i18n %}
+{% load static %}
+{% load account socialaccount %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title>underline</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" href="{% static 'css/register_style.css' %}">
+    </head>
+    <body>
+        <header>
+            <div class="nav-header-inner">
+            </div>
+        </header>
+        <main>
+            <div class="body-login-inner">
+                <div class="title">
+                    <p class="title-text">Регистрация</p>
+                </div>
+                <div class="top-block-1">
+                    <span>Быстрая регистрация с помощью:</span>
+                </div>
+                <div class="top-block-2">
+                    <ul class="auth-buttons-list">
+                        <li><a class="auth-buttons" id="telegram-button" href="{% provider_login_url 'telegram' %}"><img class="icons-auth" src="{% static 'img/logo-telegram.png' %}" alt="logo-telegram"><span id="discord-text">Telegram</span></a></li>
+                        <li><a class="auth-buttons" id="gmail-button" href="{% provider_login_url 'google' %}"><img class="icons-auth" src="{% static 'img/logo-google-gmail.png' %}" alt="logo-google-gmail"><span id="discord-text">Gmail</span></a></li>
+                        <li><a class="auth-buttons" id="mail-button" href="{% provider_login_url 'mailru' %}"><img class="icons-auth" src="{% static 'img/logo-mail.png' %}" alt="logo-mail"><span id="discord-text">Mail</span></a></li>
+                        <li><a class="auth-buttons" id="vk-button" href="{% provider_login_url 'vk' %}"><img class="icons-auth" src="{% static 'img/logo-vk.png' %}" alt="logo-vk"><span id="discord-text">VK</span></a></li>
+                        <li><a href="{% provider_login_url 'steam' %}" class="auth-buttons" id="steam-button" target="_blank"><img class="icons-auth" src="{% static 'img/logo-steam.png' %}" alt="logo-steam"><span id="steam-text">Steam</span></a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="block-middle-left">
+                        <label class="label" id="label-login" for="input-user-name">Имя пользователя:</label>
+                        <label class="label" id="label-gmail" for="input-gmail">Электронная почта:</label>
+                        <label class="label" id="label-password" for="input-password">Пароль:</label>
+                        <label class="label" id="label-repeat-password" for="input-repeat-password">Повторите пароль:</label>
+                    </div>
+                    <div class="block-middle-right">
+                        <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                            {% csrf_token %}
+                            <p><input type="text" name="username" placeholder="Имя пользователя" autocomplete="username" minlength="1" maxlength="150" required="" class="input" id="input-user-name"></p>
+                            <p><input type="email" name="email" class="input" placeholder="E-mail адрес" autocomplete="email" id="input-gmail"></p>
+                            <hr id="hr-middle-blocks">
+                            <p><input type="password" name="password1" placeholder="Пароль" autocomplete="new-password" required="" id="input-password" class="input"></p>
+                            <p><input type="password" name="password2" placeholder="Пароль (еще раз)" autocomplete="new-password" required="" id="input-repeat-password" class="input"></p>
+                            {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                            {% endif %}
+                            <div>
+                                <input class="checkbox" type="checkbox" id="new-and-updates" name="new-and-updates">
+                                <label class="label-checkbox" id="new-and-updates" for="new-and-updates">Получать новости и обновления от нас по электронной почте</label>
+                                <br>
+                                <input class="checkbox" type="checkbox" id="input-remember-me" name="remember-me">
+                                <label class="label-checkbox" id="label-remember-me" for="input-remember-me">Я согласен(на) с <a href="#" target="_blank">условиями</a> и <a href="#" target="_blank">политикой конфиденциальности</a></label>
+                            </div>
+                            <button style="margin-top: 15px;" type="submit" class="button-enter"><img src="{% static 'img/lock.png' %}" alt="lock.png"><span>{% trans "Sign Up" %} &raquo;</span></button>
+                        </form>
+                        
+                    </div>
+                    <hr id="hr-footer"> 
+                </div>
+                <div id="footer">
+                    <ul>
+                        <li><a href="#">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+        <footer>
+        </footer>
+    </body>
+</html>
+{% endblock %}

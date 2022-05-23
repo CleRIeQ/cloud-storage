@@ -1,7 +1,9 @@
-from django.contrib import admin
-from .views import UserData
-from django.urls import URLPattern, path, include, re_path
+from .views import UserData, DownloadFile
+from django.urls import path, include
 
 urlpatterns = [
-    path('<int:pk>/profile/', UserData.as_view())
+    path('<int:pk>/profile/', UserData.as_view()),
+    path('', include('allauth.urls')),
+    path('download/', DownloadFile.as_view(), name="download")
+    
 ]

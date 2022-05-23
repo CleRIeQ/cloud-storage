@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1@1qtrq0^c=g+8wft&o51%iepl$z!i(9oj5sz2zp%nzqveecmk'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -27,24 +28,38 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# Application definition
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    
+    'allauth.account.auth_backends.AuthenticationBackend',
+    
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
     'profiles',
-    'users_files',
 
-    'rest_framework',
-    'rest_framework_simplejwt',
-    'djoser',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'allauth.socialaccount.providers.vk',
+    'allauth.socialaccount.providers.telegram',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.discord',
+    'allauth.socialaccount.providers.steam',
+    'allauth.socialaccount.providers.mailru',
     
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,9 +98,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cloud nine',
+        'NAME': 'cloud-storage',
         'USER': 'postgres',
-        'PASSWORD': 'zsa21245sd',
+        'PASSWORD': 'some',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -129,25 +144,33 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'profiles/media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'profiles.UserProfile'
 
-REST_FRAMEWORK = {
-    #'DEFAULT_PERMISSION_CLASSES': [
-        #'rest_framework_simplejwt.authentication.JWTAuthentication',
-   # ]
-}
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'user/accounts/login/'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackends'
 
-SIMPLE_JWT = {
-   #'AUTH_HEADER_TYPES': ('JWT',),
-}
+SOCIALACCOUNT_PROVIDERS = {
+    'telegram': {
+        'TOKEN': ''
+    },
 
-AUTH_USER_MODEL = 'profiles.User'
-
-DJOSER = {
-    'SEND_ACTIVATION_EMAIL': False,
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
 }
