@@ -24,9 +24,10 @@ class UserData(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-            instance = form.save(commit=False)
-            instance.user = request.user
-            instance.save()
+            if request.FILES:
+                instance = form.save(commit=False)
+                instance.user = request.user
+                instance.save()
         return render(request, self.template_name, {'form': form})
         
 
@@ -44,10 +45,12 @@ class DownloadFile(View):
         if request.user.is_authenticated:
             username = request.user.username
             filename = request.POST.get('filename')
-            filepath = MEDIA_ROOT + f"\\files\\user\\{username}\\{filename}"
+            filepath = MEDIA_ROOT + f"\\{filename}"
             path = open(filepath, 'rb')
             mime_type, _ = mimetypes.guess_type(filepath)
             response = HttpResponse(path, content_type=mime_type)
+            #filename = filename.split("/")
+            #file_name = filename[3]
             response['Content-Disposition'] = "attachment; filename=%s" % filename
             return response
  

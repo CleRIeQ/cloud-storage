@@ -9,12 +9,15 @@
     <script src='main.js'></script>
 </head>
 <body>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% for i in file %}
-        <p name="filename" value="{{ i }}">{{ i }}</p>
-        <button type="submit">Скачать</button>
-        {% endfor %}
-    </form> 
+    <h1>Все ваши файлы:</h1>
+    {% for i in file %}
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input name="filename" value="{{ i.file }}" readonly></input>
+            <button type="submit">Скачать</button>
+            <br>
+        </form>
+    {% endfor %}
+     
 </body>
 </html>
